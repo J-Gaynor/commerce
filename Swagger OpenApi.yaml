@@ -1,0 +1,217 @@
+openapi: 3.0.1
+info:
+  title: Ecommerce
+  version: 1.0.0
+  description: Codecademy Portfolio Project
+paths:
+  /register:
+    summary: Handle registers
+    description: Load the page or register a new user
+    get:
+      summary: Load register page
+      description: Load the registration page where a user can sign up
+      operationId: get_register
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Get register
+    post:
+      summary: Register a user
+      description: >-
+        Check if the user has correctly signer up and, if so, add them to the
+        database
+      operationId: post_register
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Post register
+  /login:
+    summary: Handle logins
+    description: Load the page or sign in a user
+    get:
+      summary: Load login page
+      description: Load the login page where a user can sign in to the site.
+      operationId: get_login
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Get login
+    post:
+      summary: Login a user
+      description: >-
+        Attempt to sign in a user and handle happy and sad cases by either
+        signing in if details are correct or reloading the login page with an
+        error message if details are incorrect.
+      operationId: post_login
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Post login
+  /logout:
+    summary: Log the user out
+    description: Handle logging out a user if they exist
+    get:
+      summary: Log the user out.
+      description: Log out the user and end their session
+      operationId: get_logout
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Get logout
+  /:
+    summary: Go to home
+    description: Takes the user to the home page.
+    get:
+      summary: Go to home page.
+      description: Take the user to the home page
+      operationId: get_home
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Get home
+  /cart:
+    summary: Handle the cart
+    description: >-
+      Deal with viewing the items currently in the cart as well as adding items
+      to the cart
+    get:
+      summary: Load cart page
+      description: Load the cart page and all items in the cart
+      operationId: get_cart
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Get cart
+    post:
+      summary: Add item to cart
+      description: >-
+        Add an item to cart or update quantity if the item is already in the
+        cart.
+      operationId: post_cart
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Post cart
+  /cart/{user_id}/checkout:
+    summary: Handle the checkout stage
+    description: Take the user to checkout and handle submitting the checkout page.
+    parameters:
+      - name: user_id
+        in: path
+        description: Contains the user id
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Load checkout page
+      description: >-
+        Load the checkout page and handle any problems facing the order such as
+        a lack of address.
+      operationId: get_checkout
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Get checkout
+    post:
+      summary: Submit an order
+      description: If all info is okay, submit an order.
+      operationId: post_checkout
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Post checkout
+  /orders/{user_id}:
+    summary: See user's orders
+    description: See all of a user's orders as long as the user is logged in
+    parameters:
+      - name: user_id
+        in: path
+        description: Contains the user id
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Get all of a user's orders.
+      description: Get all of a user's orders when they are logged in.
+      operationId: get_orders
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Get orders
+  /users/{username}:
+    summary: Visit a user profile
+    description: Handle viewing and updating a user
+    parameters:
+      - name: username
+        in: path
+        description: Contains the username
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Get the user profile
+      description: View the user profile and see what listings they have available
+      operationId: get_user
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Get user
+    put:
+      summary: Update user details
+      description: Update the user details so that they can add an address
+      operationId: put_user
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Put user
+  /listings/{id}:
+    summary: Handle listings
+    description: View an existing or post a new listing to the site
+    parameters:
+      - name: id
+        in: path
+        description: Contains the listing id
+        required: true
+        schema:
+          type: string
+    get:
+      summary: View a listing
+      description: See details about a listed item
+      operationId: get_listing
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Get listing
+    post:
+      summary: Post a new listing
+      description: Post a new listing to the site
+      operationId: post_listing
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Post listing
+  /{category}:
+    summary: View listings by category
+    description: Filter out results that are not of a specified category
+    parameters:
+      - name: category
+        in: path
+        description: Contains the chosen category
+        required: true
+        schema:
+          type: string
