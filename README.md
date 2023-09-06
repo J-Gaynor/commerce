@@ -10,12 +10,17 @@ For detailed information about available endpoints, request/response formats, an
 
 ## API Endpoints
 
-The following is a list of available API endpoints:
+The following is a list of some common available API endpoints:
 
 - **Get All Listings**: Retrieve a list of all listings on NewBay.
-  - Endpoint: `/listings`
+  - Endpoint: `/`
   - Method: GET
-  - Usage: `/listings` or `/listings/{category}`
+  - Usage: `/` 
+  
+- **Get Categorised Listings**: Retrieve a list of all listings on NewBay that are of a certain category.
+  - Endpoint: `/{category}`
+  - Method: GET
+  - Usage: `/books`
   - Valid Categories:
     - books
     - clothes
@@ -32,8 +37,6 @@ The following is a list of available API endpoints:
   - Endpoint: `/users/{username}`
   - Method: GET
   - Usage: `/users/{username}`
-
-- ...
 
 ## User and Listing Routes
 
