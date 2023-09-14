@@ -7,6 +7,7 @@ const session = require('express-session'); // Used to store sessions
 const passport = require('passport'); 
 const LocalStrategy = require('passport-local').Strategy;
 const flash = require('express-flash'); // Used to pass error messages in this case
+const cors = require('cors');
 
 const {
     PG_USERNAME,
@@ -38,6 +39,7 @@ app.use(express.json())
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
+app.use(cors());
 
 passport.use(new LocalStrategy(
     {
@@ -138,19 +140,18 @@ app.post('/login', passport.authenticate('local', {
 }));
 
 app.get('/', (req, res, next) => {
-    //Display all listings
+    // Display all listings
     db.any('SELECT * FROM listings')
         .then(listings => { // Handle fetched data
-            if (req.isAuthenticated()) {
-                res.status(200).send(listings);            
-            } else {
-                res.send('Log in')
-            }
+            console.log('Listings data:', listings); // Add this line for debugging
+            res.status(200).json(listings);
         })
         .catch(error => { // Handle error
+            console.error('Database error:', error); // Add this line for debugging
             res.status(500).json({error: 'Internal server error'});
         });
 });
+
 
 app.get('/logout', (req, res) => {
     req.logout();
