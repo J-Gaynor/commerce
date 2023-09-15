@@ -1,11 +1,66 @@
+html{
+    font-size: 24px;
+}
+
+/* HEADER */
+#header {
+    background-color: rgb(59, 167, 255);
+    display: inline-flex;
+    width: 100%;
+}
+
+.header-links {
+    color: black;
+    font-size: 0.75rem;
+    margin-right: 0.5rem;
+    text-decoration: none;
+}
+
+.header-links:hover {
+    color:rgb(0, 0, 187);
+}
+
+#searchbar {
+    border-radius: .2rem;
+    height: 1.3rem;
+    margin: auto;
+    outline: none;
+    width: 30rem;
+}
+
+#searchbar:focus {
+    background-color: none;
+    outline: 1px solid #000000;
+    /* -webkit-box-shadow: 0 0 0 1px rgb(0, 0, 0), 0 0 0 3px rgb(0, 0, 0);
+    -moz-box-shadow: 0 0 0 1px rgb(0, 0, 0), 0 0 0 3px rgb(0, 0, 0);
+    box-shadow: 0 0 0 1px rgb(0, 0, 0), 0 0 0 3px rgb(0, 0, 0); */
+    z-index: 1;
+}
+
+/* HOMEPAGE */
+.listing-box {
+    border: 1px solid black;
+    border-radius: .5rem;
+}
+
+.listing-box:hover {
+    cursor: pointer;
+}
+
 .listing-items {
     display: inline-grid;
-    grid-template-columns: repeat(5, 1fr); /* Create 5 equal-width columns */
+    grid-template-columns: repeat(6, 1fr); /* Create 5 equal-width columns */
     grid-auto-rows: minmax(100px, auto); /* Set minimum row height and let rows expand as needed */
-    gap: 10px; /* Add some gap between grid items */
+    gap: 20px; /* Add some gap between grid items */
     list-style: none;
 }
 
 .listing-image {
-    width: 75%
+    border-radius: .45rem;
+    width: 100%
+}
+
+.listing-link {
+    color: black;
+    text-decoration: none;
 }

@@ -1,10 +1,10 @@
-import './App.css';
-import ListingsContainer from './containers/ListingsContainer';
+import "./App.css";
+import AppRouter from "./AppRouter";
 
 function App() {
   return (
     <div className="App">
-        <ListingsContainer />
+      <AppRouter />
     </div>
   );
 }

@@ -134,10 +134,20 @@ app.get('/login', (req, res, next) => {
     res.send('Please log in.');
 })
 
-app.post('/login', passport.authenticate('local', {
-    failureRedirect: '/login',
-    successRedirect: '/'
-}));
+app.post('/login', (req, res, next) => {
+    passport.authenticate('local', (err, user, info) => {
+        if (err) {
+            return next(err);
+        }
+        if (!user) {
+            // Authentication failed, send a 401 Unauthorized response
+            return res.status(401).json({ message: info.message });
+        }
+        // Authentication succeeded, send a 200 OK response
+        return res.status(200).json({ message: "Authentication successful" });
+    })(req, res, next);
+});
+
 
 app.get('/', (req, res, next) => {
     // Display all listings

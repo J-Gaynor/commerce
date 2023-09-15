@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchListingsRequest, fetchListingsSuccess, fetchListingsFailure } from '../slices/listingsSlice';
 import ListingsComponent from '../components/ListingsComponent';
+import HeaderContainer from "./HeaderContainer";
 
 function ListingsContainer() {
     const dispatch = useDispatch();
@@ -32,7 +33,12 @@ function ListingsContainer() {
         return <p>Error: {error}</p>;
     }
     
-    return <ListingsComponent />;
+    return (
+        <>
+            <HeaderContainer />
+            <ListingsComponent />;
+        </>
+    )
 }
 
 export default ListingsContainer;
