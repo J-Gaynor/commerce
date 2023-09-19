@@ -310,16 +310,17 @@ app.put('/users/:username', async(req, res, next) => {
 })
 
 app.get('/listing/:id', async(req, res, next) => {
-    const id = req.params.id
+    const id = req.params.id;
     const checkForListing = await db.any('SELECT * FROM listings WHERE id = $1', [id]);
     if (checkForListing.length !== 1) {
-        res.status(404).send('Bad request: this item does not exist.');
+        res.status(404).json({ message: 'Bad request: this item does not exist.' });
         return;
     }
 
     const listing = await db.any(`SELECT listings.item_name, listings.description, listings.image, listings.category_name, listings.price, users.username
     FROM listings JOIN users ON listings.seller_id = users.id WHERE listings.id = $1`, [id]);
-    res.send(listing);
+    console.log(listing)
+    res.status(200).json({ listing });
 })
 
 app.post('/listing/:id', async(req, res, next) => {

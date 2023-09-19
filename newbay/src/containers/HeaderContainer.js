@@ -27,8 +27,8 @@ function HeaderContainer() {
         });
     };
     const isAuthenticated = useSelector((state) => state.login.user !== null);
-    console.log(localStorage.getItem('authToken'));
-    console.log(useSelector((state) => state.login.user))
+    // console.log(localStorage.getItem('authToken'));
+    // console.log(useSelector((state) => state.login.user))
 
     return (
         <HeaderComponent 
