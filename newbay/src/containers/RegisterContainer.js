@@ -1,7 +1,10 @@
 import { useState } from "react";
+import { loginSuccess } from "../slices/loginSlice";
 import RegisterComponent from "../components/RegisterComponent";
+import { useDispatch } from "react-redux";
 
 function RegisterContainer() {
+    const dispatch = useDispatch();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -26,7 +29,11 @@ function RegisterContainer() {
             });
 
             if (response.ok) {
-                console.log('success')
+                const responseData = await response.json();
+                console.log(responseData.user);
+                localStorage.setItem('authToken', responseData.token);
+                dispatch(loginSuccess(responseData.user));
+                window.location.href='/';                
             } else {
                 alert('failure')
             }

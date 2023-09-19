@@ -9,6 +9,7 @@ function HeaderContainer() {
 
     function handleLogout() {
         dispatch(logoutUser());
+        localStorage.setItem('authToken', null);
         fetch('http://localhost:8000/logout/', {
             method: 'GET',
             credentials: 'include',

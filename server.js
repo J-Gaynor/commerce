@@ -36,11 +36,16 @@ app.use(session({
     store,
 }));
 
+const corsOptions = {
+    origin: 'http://localhost:3000',
+    credentials: true,
+  };
+
 app.use(express.json())
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
-app.use(cors());
+app.use(cors(corsOptions));
 
 function generateAuthToken(user) {
     console.log(user)
@@ -104,11 +109,8 @@ app.get('/register', (req, res, next) => {
 })
 
 app.post('/register', async (req, res, next) => {
-    const username = req.query.username;
-    const password = req.query.password;
-    const confirmPassword = req.query.confirmPassword;
-    const email = req.query.email;
     let hashed_password;
+    const { username, password, confirmPassword, email } = req.body;
     if (!username || !password || !confirmPassword || !email) {
         res.status(500).json({ message: 'Missing account details.' });
         return;
@@ -121,20 +123,20 @@ app.post('/register', async (req, res, next) => {
     
     bcrypt.hash(password, saltRounds, async (err, hash) => {
         if (err) {
-            res.status(500).send('Unable to hash password at this time.')
+            res.status(500).json({ message: 'Unable to hash password at this time.' })
         } else {
             hashed_password = hash;
             try {
                 await registration_validation(db, username, password, email);
                 await db.any('INSERT INTO users (username, hashed_password, email_address) VALUES ($1, $2, $3)', [username, hashed_password, email]);
                 const user = await db.any('SELECT * FROM users WHERE username = $1', [username]);
-                res.status(200).send(`Thanks for signing up, ${username}!`);
+                const token = generateAuthToken(user);
+                res.status(200).json({ token, user });
             } catch (error) {
-                res.status(409).send(error.message);
+                res.status(409).json({ error: error.message });
             }
         }
     });
-    
 });
 
 app.get('/login', (req, res, next) => {
