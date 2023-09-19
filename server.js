@@ -8,6 +8,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const flash = require('express-flash'); // Used to pass error messages in this case
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
 
 const {
     PG_USERNAME,
@@ -40,6 +41,12 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 app.use(cors());
+
+function generateAuthToken(user) {
+    console.log(user)
+    const token = jwt.sign({ id: user.id, username: user.username }, '62Tv7aAnMb7W', { expiresIn: '1h' });
+    return token;
+}
 
 passport.use(new LocalStrategy(
     {
@@ -99,12 +106,18 @@ app.get('/register', (req, res, next) => {
 app.post('/register', async (req, res, next) => {
     const username = req.query.username;
     const password = req.query.password;
+    const confirmPassword = req.query.confirmPassword;
     const email = req.query.email;
     let hashed_password;
-    if (!username || !password || !email) {
-        res.status(500).send('Missing account details.');
+    if (!username || !password || !confirmPassword || !email) {
+        res.status(500).json({ message: 'Missing account details.' });
         return;
     }
+    if (password !== confirmPassword) {
+        res.status(500).json({ message: 'passwords do not match'})
+        return;
+    }
+
     
     bcrypt.hash(password, saltRounds, async (err, hash) => {
         if (err) {
@@ -140,11 +153,15 @@ app.post('/login', (req, res, next) => {
             return next(err);
         }
         if (!user) {
-            // Authentication failed, send a 401 Unauthorized response
-            return res.status(401).json({ message: info.message });
+            return res.status(401).json({ message: 'user not found' });
         }
-        // Authentication succeeded, send a 200 OK response
-        return res.status(200).json({ message: "Authentication successful" });
+        req.login(user, (err) => {
+            if (err) {
+                return next(err);
+            }
+            const token = generateAuthToken(user);
+            return res.status(200).json({ token, user });
+        })
     })(req, res, next);
 });
 
@@ -164,8 +181,13 @@ app.get('/', (req, res, next) => {
 
 
 app.get('/logout', (req, res) => {
-    req.logout();
-    res.redirect('/');
+    req.logout((err) => {
+        if (err) {
+            res.status(500).json({ message: 'Logout error' });
+        } else {
+            res.json({ message: 'Logged out' });
+        }
+    });
 });
 
 app.get('/cart', async(req, res, next) => {

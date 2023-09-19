@@ -20,6 +20,14 @@ html{
     color:rgb(0, 0, 187);
 }
 
+#logout-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.75rem;
+    padding: 0;
+}
+
 #searchbar {
     border-radius: .2rem;
     height: 1.3rem;

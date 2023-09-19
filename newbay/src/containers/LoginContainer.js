@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
-import { loginRequest } from '../slices/loginSlice';
+import { loginSuccess } from '../slices/loginSlice';
 import LoginComponent from "../components/LoginComponent";
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux/es/hooks/useSelector';
 
-const mapDispatchToProps = {
-  loginRequest,
-};
+function LoginContainer() {
+    const dispatch = useDispatch();
 
-function LoginContainer(props) {
-    const { loginRequest } = props;
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     
@@ -30,6 +28,9 @@ function LoginContainer(props) {
             });
 
             if (response.ok) {
+                const responseData = await response.json();
+                localStorage.setItem('authToken', responseData.token);
+                dispatch(loginSuccess(responseData.user));
                 window.location.href='/';
             } else {
                 alert('Try again');
@@ -38,6 +39,8 @@ function LoginContainer(props) {
             console.log('Error: ', error)
         }
     }
+    console.log(localStorage.getItem('authToken'));
+    console.log(useSelector((state) => state.login.user))
 
     return (
         <LoginComponent
@@ -50,4 +53,4 @@ function LoginContainer(props) {
     )
 }
 
-export default connect(null, mapDispatchToProps)(LoginContainer);
+export default LoginContainer;
